@@ -1,0 +1,95 @@
+/*-------------------------------------------------------
+-- ECサイト単元 使用SQL文
+-------------------------------------------------------*/
+/*-------------------------------------------------------
+-- レッスン1　使用分：開始
+-------------------------------------------------------*/
+-- ec_practice　データベース作成
+
+DROP DATABASE IF EXISTS ec_practice;
+CREATE DATABASE ec_practice;
+ALTER DATABASE ec_practice CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+USE ec_practice;
+
+-- category（カテゴリ）テーブル作成
+
+CREATE TABLE category (
+    category_id INT PRIMARY KEY,
+    category_name VARCHAR(255) UNIQUE
+);
+-- product（商品）テーブル作成
+
+CREATE TABLE product (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(255) UNIQUE,
+    product_description VARCHAR(255),
+    product_price INT,
+    product_image_path VARCHAR(255),
+    category_id INT
+);
+-- order_history（注文履歴）テーブル作成
+
+CREATE TABLE order_history (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT,
+    order_count INT,
+    ordered_at DATETIME
+);
+
+
+-- category（カテゴリ）テーブル データ挿入
+
+INSERT INTO category (category_id, category_name) VALUES (1,'照明');
+INSERT INTO category (category_id, category_name) VALUES (2,'家具');
+INSERT INTO category (category_id, category_name) VALUES (3,'観葉植物');
+
+-- product（商品）テーブル データ挿入
+
+INSERT INTO product (product_id, product_name, product_description, category_id, product_price, product_image_path)
+VALUES (1, 'ペンダントライトA', 'レトロな雰囲気で明るく照らしてくれるライトです。', 1, 10000, '/images/light_bulb1.png');
+INSERT INTO product (product_id, product_name, product_description, category_id, product_price, product_image_path)
+VALUES (2, 'ペンダントライトB', 'モダンな雰囲気で明るく照らしてくれるライトです。', 1, 20000, '/images/light_bulb2.png');
+INSERT INTO product (product_id, product_name, product_description, category_id, product_price, product_image_path)
+VALUES (3, 'ペンダントライトC', 'シックな雰囲気で明るく照らしてくれるライトです。', 1, 30000, '/images/light_bulb3.png');
+INSERT INTO product (product_id, product_name, product_description, category_id, product_price, product_image_path)
+VALUES (4, 'ダイニングチェアA', 'モダンな佇まいで空間を彩る高級感のある椅子です。', 2, 15000, '/images/chair1.png');
+INSERT INTO product (product_id, product_name, product_description, category_id, product_price, product_image_path)
+VALUES (5, 'ダイニングチェアB', '長時間の作業でも負担の少ない椅子です。', 2, 25000, '/images/chair2.png');
+INSERT INTO product (product_id, product_name, product_description, category_id, product_price, product_image_path)
+VALUES (6, 'ダイニングチェアC', '上質な雰囲気で快適に座れる椅子です。', 2, 50000, '/images/chair3.png');
+INSERT INTO product (product_id, product_name, product_description, category_id, product_price, product_image_path)
+VALUES (7, 'セレブな観葉植物A', '日々の暮らしに安らぎを与えてくれる観葉植物です。', 3, 1000, '/images/plant1.png');
+INSERT INTO product (product_id, product_name, product_description, category_id, product_price, product_image_path)
+VALUES (8, 'セレブな観葉植物B', '日々の暮らしに癒やしを与えてくれる観葉植物です。', 3, 2000, '/images/plant2.png');
+INSERT INTO product (product_id, product_name, product_description, category_id, product_price, product_image_path)
+VALUES (9, 'セレブな観葉植物C', '日々の暮らしに温もりを与えてくれる観葉植物です。', 3, 3000, '/images/plant3.png');
+
+
+-- category（カテゴリ）テーブル データ確認
+
+SELECT * FROM category ORDER BY category_id ASC;
+
+-- product（商品）テーブル データ確認
+
+SELECT * FROM product ORDER BY product_id ASC;
+
+/*-------------------------------------------------------
+-- レッスン1　使用分：終了
+-------------------------------------------------------*/
+
+
+-- 注文履歴テーブル データ挿入 ※必須ではない（正しくデータが入るか予め確認したい時用）
+
+INSERT INTO order_history (product_id, order_count, ordered_at)
+VALUES (1, 2, NOW());
+
+
+-- 注文履歴テーブルから全件の「注文日」「商品名」「注文数」を取得 （LESSON5 最終動作確認時に使用）
+
+USE ec_practice;
+
+SELECT o.ordered_at, p.product_name, o.order_count
+FROM order_history o
+INNER JOIN product p
+ON o.product_id = p.product_id;
